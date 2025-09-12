@@ -1,0 +1,9 @@
+---
+triple:          'x86_64-apple-darwin'
+binary-path:     '/Users/wujing/Documents/GitHub/MTEC-353/01.GettingStarted/3'
+relocations:
+  - { offset: 0x26, size: 0x8, addend: 0x0, symName: _calculate_period, symObjAddr: 0x0, symBinAddr: 0x100000ED0, symSize: 0x30 }
+  - { offset: 0x48, size: 0x8, addend: 0x0, symName: _calculate_period, symObjAddr: 0x0, symBinAddr: 0x100000ED0, symSize: 0x30 }
+  - { offset: 0x8C, size: 0x8, addend: 0x0, symName: _calculate_frequency, symObjAddr: 0x30, symBinAddr: 0x100000F00, symSize: 0x20 }
+  - { offset: 0xB4, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0x50, symBinAddr: 0x100000F20, symSize: 0x4A }
+...
