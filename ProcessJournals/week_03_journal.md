@@ -1,4 +1,4 @@
-Week03 Process Journal
+# Week03 Process Journal
 ## 1. Technical Challenge & Solution Process
 #### Confused about the logic of * and &
 ####    - Solved by asking GPT, 
