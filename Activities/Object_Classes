@@ -1,0 +1,51 @@
+Deconstruct the Experience
+
+Identify what users can observe (attributes) and manipulate (functions) in
+their assigned software:
+
+What information does it display?
+- Oscilator paterns
+- Oscilator parameters
+- Envlops that can modulate to any parameters
+- LFOs that can modulate to any parameters
+- Filter that can apply to each Oscilators
+
+What controls/parameters exist?
+Oscillators (OSC A / OSC B):
+Wavetable, WT Pos, Warp Mode, Warp Amount, Level, Pan, Octave, Semitone, Fine, Unison, Detune, Blend, Phase, Rand
+
+Sub Oscillator:
+Waveform, Octave, Level, Pan, Direct Out, Phase
+
+Noise Oscillator:
+Noise Type, Pitch, Keytrack, Level, Pan, Phase, Random Phase
+
+Filter:
+Type, Cutoff, Resonance, Drive, Fat, Pan, Mix
+
+Envelopes (ENV1, ENV2, ENV3):
+Attack, Hold, Decay, Sustain, Release, Curve
+
+LFOs:
+Shape, Rate, Mode, Smooth, Delay, Rise
+
+Global:
+Portamento, Glide, Polyphony, Mono, Legato, Master Tune, Master Volume, Oscillator Routing
+
+FX Rack:
+Hyper/Dimension Mix, Hyper/Dimension Rate, Hyper/Dimension Size, Hyper/Dimension Detune, Hyper/Dimension Unison,
+Distortion Type, Distortion Drive, Distortion Mix, Distortion Filter,
+Chorus Rate, Chorus Delay, Chorus Depth, Chorus Feedback, Chorus Low Cut, Chorus High Cut, Chorus Mix,
+Flanger Rate, Flanger Depth, Flanger Feedback, Flanger Phase, Flanger Mix,
+Phaser Rate, Phaser Depth, Phaser Feedback, Phaser Frequency, Phaser Mix,
+Delay Time L, Delay Time R, Delay Feedback, Delay Filter, Delay Ping-Pong, Delay Mix,
+Reverb Size, Reverb Decay, Reverb Low Cut, Reverb High Cut, Reverb Pre-Delay, Reverb Mix,
+EQ Freq1, EQ Gain1, EQ Q1, EQ Freq2, EQ Gain2, EQ Q2, EQ Mode,
+Compressor Threshold, Compressor Ratio, Compressor Attack, Compressor Release, Compressor Gain, Compressor Multiband
+
+
+
+What happens when you interact with it?
+- Parameter: change the variabale value
+
+You may use AI to guide your thinking
