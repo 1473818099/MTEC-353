@@ -1,11 +1,27 @@
-What information does it display?
+# Week03 Process Journal
+## 1. Technical Challenge & Solution Process
+Not much. After we made a conclusion of what functions should be set as variables, we ased GPT to list all avaliable parameters in Serum to us. See the bottom of the page for all parameters.
+
+
+## 2. Collaborative Learning Insights:
+We figured that these part of values should be set as variables:
 - Oscilator paterns
 - Oscilator parameters
 - Envlops that can modulate to any parameters
 - LFOs that can modulate to any parameters
 - Filter that can apply to each Oscilators
 
-What controls/parameters exist?
+## 3. Reflection & Next Steps:
+- Check out each variable if there're correct
+
+.
+
+.
+
+.
+
+.
+## Controls/parameters that exist
 Oscillators (OSC A / OSC B):
 Wavetable, WT Pos, Warp Mode, Warp Amount, Level, Pan, Octave, Semitone, Fine, Unison, Detune, Blend, Phase, Rand
 
@@ -37,8 +53,3 @@ Delay Time L, Delay Time R, Delay Feedback, Delay Filter, Delay Ping-Pong, Delay
 Reverb Size, Reverb Decay, Reverb Low Cut, Reverb High Cut, Reverb Pre-Delay, Reverb Mix,
 EQ Freq1, EQ Gain1, EQ Q1, EQ Freq2, EQ Gain2, EQ Q2, EQ Mode,
 Compressor Threshold, Compressor Ratio, Compressor Attack, Compressor Release, Compressor Gain, Compressor Multiband
-
-
-
-What happens when you interact with it?
-- Parameter: change the variabale value
