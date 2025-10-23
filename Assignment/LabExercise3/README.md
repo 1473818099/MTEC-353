@@ -1,4 +1,4 @@
-# LabExercise2 — Random Melody Generator (C, Pointers, and Advanced Data Types)
+# LabExercise3 — Random Melody Generator (C, Pointers, and Advanced Data Types)
 ### Using `gcc` to build
 ```bash
 gcc -O2 -std=c11 melody_generator.c -o melody_generator -lm
