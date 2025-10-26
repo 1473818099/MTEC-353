@@ -1,0 +1,136 @@
+#include <iostream>
+#include <string>
+
+// Base class - DO NOT MODIFY
+class AudioEffect {
+protected:
+    std::string effectName;
+    bool enabled;
+    
+public:
+    AudioEffect(std::string name) : effectName(name), enabled(true) {}
+    
+    virtual ~AudioEffect() {
+        std::cout << "Destroying effect: " << effectName << std::endl;
+    }
+    
+    // Pure virtual - must be implemented by derived classes
+    virtual void process() = 0;
+    virtual void printSettings() const = 0;
+    
+    void toggle() { 
+        enabled = !enabled;
+        std::cout << effectName << " is now " 
+                  << (enabled ? "enabled" : "disabled") << std::endl;
+    }
+    
+    bool isEnabled() const { return enabled; }
+    std::string getName() const { return effectName; }
+};
+
+class ReverbEffect : public AudioEffect {
+    private:
+        float roomSize; // 0.0 to 1.0
+
+    public:
+        ReverbEffect(float size) : AudioEffect("Reverb") {
+            setRoomSize(size);
+
+        void setRoomSize(float size) {
+        for (size < 0.0f) roomSize = 0.0f;
+            else if (size > 1.0f) roomSize = 1.0f;
+            else roomSize = size;
+        }
+        void process() override {
+            if (enabled) {
+                std::cout << "Processing reverb with room size: " << roomSize << std::endl;
+            } 
+            else {
+                std::cout << "Reverb bypassed" << std::endl;
+            }
+        }
+        void printSettings() const override {
+            std::cout << "Effect: " << effectName << ", Room Size: " << roomSize << std::endl;
+        }
+    void float getRoomSize() const {
+        return roomSize;
+    }
+
+
+// TODO: Implement ReverbEffect class
+// Requirements:
+// 1. Inherit from AudioEffect
+// 2. Add private member: float roomSize (0.0 to 1.0)
+// 3. Constructor: ReverbEffect(float size)
+//    - Call base constructor with name "Reverb"
+//    - Validate and set roomSize
+// 4. Implement setRoomSize(float size) with validation (0.0 to 1.0)
+// 5. Implement process() override:
+//    - If enabled: print "Processing reverb with room size: [value]"
+//    - If disabled: print "Reverb bypassed"
+// 6. Implement printSettings() override:
+//    - Print effect name and current room size
+// 7. Add getter: float getRoomSize()
+
+
+class DistortionEffect : public AudioEffect {
+private:
+    int driveAmount; // 0 to 100
+public:
+    DistortionEffect(int drive) : AudioEffect("Distortion") {
+        setDrive(drive);
+
+        void setDrive(int drive) {
+        if (drive < 0) driveAmount = 0;
+        else if (drive > 100) driveAmount = 100;
+        else driveAmount = drive;
+
+        void process() override {
+            if (enabled) {
+                std::cout << "Applying distortion with drive: " << driveAmount << "%" << std::endl;
+            } else {
+                std::cout << "Distortion bypassed" << std::endl;
+            }
+
+        void printSettings() const override {
+            std::cout << "Effect: " << effectName << ", Drive: " << drive
+                        << "%" << std::endl;
+
+                        in getbsize
+
+}
+
+// TODO: Implement DistortionEffect class
+// Requirements:
+// 1. Inherit from AudioEffect
+// 2. Add private member: int driveAmount (0 to 100)
+// 3. Constructor: DistortionEffect(int drive)
+//    - Call base constructor with name "Distortion"
+//    - Validate and set driveAmount
+// 4. Implement setDrive(int drive) with validation (0 to 100)
+// 5. Implement process() override:
+//    - If enabled: print "Applying distortion with drive: [value]%"
+//    - If disabled: print "Distortion bypassed"
+// 6. Implement printSettings() override:
+//    - Print effect name and current drive amount
+// 7. Add getter: int getDrive()
+
+
+
+int main() {
+    std::cout << "=== Audio Effect System Test ===" << std::endl;
+    
+    // TODO: Demonstrate polymorphism
+    // 1. Create a ReverbEffect* with room size 0.7
+    // 2. Create a DistortionEffect* with drive 75
+    // 3. Store both in an AudioEffect* array of size 2
+    // 4. Loop through array and call printSettings() on each
+    // 5. Toggle the first effect off
+    // 6. Loop through array and call process() on each
+    // 7. Clean up memory (delete both objects)
+    
+    // Your code here
+    
+    std::cout << "=== Test Complete ===" << std::endl;
+    return 0;
+}
