@@ -256,8 +256,4 @@ E[k] = DFT of the even-indexed samples
 ]
 O[k] = DFT of the odd-indexed samples
 
-The total computation cost becomes:
-
-𝑁
-)
-O(NlogN)
+The total computation cost becomes: O(NlogN)
