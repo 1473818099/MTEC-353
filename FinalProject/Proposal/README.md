@@ -17,8 +17,13 @@ JUCE Modules:
 - juce_audio_processors 
 - juce_audio_devices 
 - juce_audio_formats
+- juce_gui_basics
+- juce_gui_extra
+- juce_audio_utils – for meters only
 
-
+C++ features utilized:
+- C++ features utilized
+- Encapsulation & RAII
 
 # Steps
 
