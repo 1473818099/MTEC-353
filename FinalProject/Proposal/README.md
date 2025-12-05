@@ -3,7 +3,7 @@ This is an DSP plugin that can:
 - Recreates the acoustics of a real space by applying its impulse response to the audio
 
 Features:
-- Full FFT/IFFT Formula coding, overlap buffer 
+- Full FFT/IFFT Formula coding, overlap-add buffer 
 - DSP plugin
 - GUI
 
