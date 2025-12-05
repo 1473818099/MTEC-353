@@ -25,8 +25,84 @@ C++ features utilized:
 - C++ features utilized
 - Encapsulation & RAII
 
-# Steps
+DSP algorithms to implement:
+- FFT, IFFT
+- Frequency-domain convolution - Complex multiply
+- Overlap-Add (OLA)
+- Zero-padding samples
 
+Class hierarchy design
+- ConvolutionReverbAudioProcessor (Owns DSP objects) - juce::AudioProcessor - [Implements] prepareToPlay, processBlock, releaseResources
+- ConvolutionReverbAudioProcessorEditor (Owns GUI related)
+- ConvolutionEngineBase - Pure DSP base for any convolution variant
+- FFTProcessor, IRLoader, ImpulseResponse
+- ParameterManager
+
+Thread separation
+- Audio Thread (Real-Time Processing Thread)
+- Background Worker Thread (IR Loading & Preprocessing)(Offline)
+- Message / GUI Thread (JUCE Message Thread)
+
+Data flow diagram
+
+- Audio Path (Real-Time):   
+    ->  Host Audio Input  
+    ->  Convolution Engine (FFT -> Multiply -> IFFT -> OLA)  
+    ->  Dry/Wet Mix  
+    ->  Host Audio Output
+
+- Control / IR Loading Path (Non-Real-Time):    
+    ->  User Load IR    
+    ->  GUI Thread (FileChooser)    
+    ->  Background Thread (Load IR + Preprocess + FFT partitions)   
+    ->  Atomic Engine Swap  
+    ->  Audio Thread Uses New IR    
+
+Performance Requirements:
+- Sample Rates: 44.1 kHz, 48 kHz
+- Buffer Size:
+    - 512 samples
+    - 1024 samples
+- Maximum acceptable latency: 10 ~ 20ms
+- CPU usage: 371,000 per block(1024), 1.59 × 10⁷ FLOPs/sec
+
+# 3. Scope Management
+GOOD Outcome:
+- Basic Audio routing system
+- FFT/IFFT algorihm
+- GUI designed
+
+BETTER Outcome:
+- Able to playback, mono.
+
+BEST Outcome:   
+- Partitioned convolution (small partitions for early reflections, larger for tail)
+- SIMD/vectorization    
+- Background threads for loading IR 
+- vDSP / FFTW for faster FFTs   
+- Lock-free ring buffers    
+
+# 4. Implementation Plan
+- As soon as possible
+
+# 5. AI Collaboration Strategy
+- Will consult AI about algorithm
+- Give class arrange stratergy
+- Debug
+- I am documenting every knowledge I learned from AI including OLA buffer allocation, FFT algorithm
+
+# 6. Risk Assessment
+Technical Challenges:
+- Difficult implement complex number calculation
+- OLA - Overlap-Add implementation
+
+Knowledge Gaps:
+- DFT and FFT Theory
+- Taylor Series Formula
+- Euler’s Formula
+
+
+# Additional Resource - Project workflow
 1. Project setup
     - Create a ConvolutionReverb class
     - AudioProcessor holds one instance and calls it in prepareToPlay() and processBlock().
@@ -99,7 +175,8 @@ C++ features utilized:
 
 
 
-# DFT and FFT Theory fundementals
+# Additional Resources: Theory
+- Theory study was done before writing this proposal
 
 ## Taylor Series Formula
 The Taylor Series is a mathematical method that represents a smooth function as an infinite polynomial expansion. Instead of working with the original function—which might involve exponentials, trigonometric functions, or other complicated expressions—the Taylor Series approximates it using simple powers of (x−a).
