@@ -8,11 +8,14 @@
 
 struct IRData
 {
+    int partitionSize = 0;
     int fftOrder = 11;
-    int fftSize = 2048;
+    int fftSize = 2048; // fftSize >= 2 * partitionSize
+    int numPartitions = 0;
     int numChannels = 1;
     int irLength = 0;
-    std::vector<std::vector<float>> frequencyData; // per-channel interleaved real/imag, length = 2 * fftSize
+    // partitions[channel][partitionIndex] -> interleaved real/imag length 2 * fftSize
+    std::vector<std::vector<std::vector<float>>> partitions;
 };
 
 class ConvolutionEngine
@@ -26,24 +29,34 @@ public:
     void setMix(float wetDry);   // 0..1 wet mix
     void setOutputTrim(float db); // dB trim applied after mix
 
+    int getPartitionSize() const { return partitionSize; }
+
     void process(juce::AudioBuffer<float>& buffer);
 
 private:
     void ensureFFTOrder(int desiredOrder);
-    void resizeBuffers(int numChannels);
-    void processChannel(int channel, float* samples, int numSamples);
+    void resizeBuffers(int numChannels, int numPartitions);
+    void processBlockPartitioned(int channel, float* samples, int numSamples);
+    void processChunk(int channel, float* samples, int chunkOffset, int chunkSize);
 
     std::unique_ptr<juce::dsp::FFT> fft;
     int fftOrder = 11;
     int fftSize = 2048;
+    int partitionSize = 1024;
+    int numPartitions = 0;
     int blockSize = 0;
 
     double sampleRate = 44100.0;
     float wetMix = 0.5f;
     float outputGain = 1.0f;
 
-    std::atomic<std::shared_ptr<IRData>> currentIR{ nullptr };
+    std::shared_ptr<IRData> currentIR{ nullptr };
 
-    std::vector<std::vector<float>> overlapBuffers; // per channel, length fftSize
-    std::vector<float> temp;                        // interleaved buffer length 2 * fftSize
+    std::vector<std::vector<float>> overlapBuffers;              // per channel, length fftSize
+    std::vector<std::vector<std::vector<float>>> inputSpectra;   // per channel, ring buffer of input partitions (numPartitions x 2*fftSize)
+    std::vector<int> writePositions;                             // per channel
+
+    std::vector<float> tempFreq;      // interleaved buffer length 2 * fftSize
+    std::vector<float> accumFreq;     // accumulation buffer length 2 * fftSize
+    std::vector<float> dryCopy;       // scratch for dry signal per host block
 };

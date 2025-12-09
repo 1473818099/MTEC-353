@@ -6,7 +6,18 @@ Convolution_ReverbAudioProcessorEditor::Convolution_ReverbAudioProcessorEditor(C
 {
     setSize(420, 240);
 
-    loadButton.onClick = [this]() { processor.promptForImpulse(); };
+    loadButton.onClick = [this]()
+    {
+        fileChooser = std::make_unique<juce::FileChooser>("Select Impulse Response", juce::File{}, "*.wav;*.aiff");
+        auto flags = juce::FileBrowserComponent::openMode | juce::FileBrowserComponent::canSelectFiles;
+        fileChooser->launchAsync(flags,
+                                 [this](const juce::FileChooser& fc)
+                                 {
+                                     auto result = fc.getResult();
+                                     if (result.existsAsFile())
+                                         processor.loadImpulse(result);
+                                 });
+    };
     addAndMakeVisible(loadButton);
 
     statusLabel.setText("IR: None", juce::dontSendNotification);

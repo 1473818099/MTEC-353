@@ -20,7 +20,7 @@ std::shared_ptr<IRData> IRLoader::loadIR(const juce::File& file,
         // A production version should resample here.
     }
 
-    const int64 totalSamples = reader->lengthInSamples;
+    const auto totalSamples = static_cast<int>(reader->lengthInSamples);
     if (totalSamples <= 0)
         return nullptr;
 
@@ -29,37 +29,56 @@ std::shared_ptr<IRData> IRLoader::loadIR(const juce::File& file,
 
     auto monoIR = makeMono(irBuffer);
     const int irLength = static_cast<int>(monoIR.size());
+    const int partitionSize = computePartitionSize(blockSize);
+    const int fftSize = partitionSize * 2;
+    const int fftOrder = computeFFTOrder(fftSize);
 
-    const int fftOrder = computeFFTOrder(blockSize, irLength);
-    const int fftSize = 1 << fftOrder;
-
-    std::vector<float> fftBuffer(static_cast<size_t>(fftSize * 2), 0.0f);
-    std::copy(monoIR.begin(), monoIR.end(), fftBuffer.begin());
+    const int numPartitions = (irLength + partitionSize - 1) / partitionSize;
 
     juce::dsp::FFT fft(fftOrder);
-    fft.performRealOnlyForwardTransform(fftBuffer.data());
 
     auto data = std::make_shared<IRData>();
+    data->partitionSize = partitionSize;
     data->fftOrder = fftOrder;
     data->fftSize = fftSize;
+    data->numPartitions = numPartitions;
     data->numChannels = 1;
     data->irLength = irLength;
-    data->frequencyData.push_back(std::move(fftBuffer));
+    data->partitions.resize(1);
+    data->partitions[0].resize(static_cast<size_t>(numPartitions));
+
+    for (int p = 0; p < numPartitions; ++p)
+    {
+        std::vector<float> fftBuffer(static_cast<size_t>(fftSize * 2), 0.0f);
+        const int offset = p * partitionSize;
+        const int remaining = irLength - offset;
+        const int copyCount = std::max(0, std::min(partitionSize, remaining));
+        if (copyCount > 0)
+            std::copy(monoIR.begin() + offset, monoIR.begin() + offset + copyCount, fftBuffer.begin());
+
+        fft.performRealOnlyForwardTransform(fftBuffer.data());
+        data->partitions[0][static_cast<size_t>(p)] = std::move(fftBuffer);
+    }
 
     return data;
 }
 
-int IRLoader::computeFFTOrder(int hostBlockSize, int irLength) const
+int IRLoader::computePartitionSize(int hostBlockSize) const
 {
-    const int needed = hostBlockSize + irLength;
-    int size = 1;
+    int size = juce::nextPowerOfTwo(hostBlockSize);
+    return std::max(size, 256);
+}
+
+int IRLoader::computeFFTOrder(int fftSize) const
+{
     int order = 0;
-    while (size < needed)
+    int size = 1;
+    while (size < fftSize)
     {
         size <<= 1;
         ++order;
     }
-    return std::max(order, 8); // minimum 256-point FFT
+    return order;
 }
 
 std::vector<float> IRLoader::makeMono(const juce::AudioBuffer<float>& buffer)

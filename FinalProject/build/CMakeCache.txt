@@ -240,8 +240,96 @@ Convolution_Reverb_IS_TOP_LEVEL:STATIC=ON
 //Value Computed by CMake
 Convolution_Reverb_SOURCE_DIR:STATIC=/Users/wujing/Documents/GitHub/MTEC-353/FinalProject/Implementation/Convolution_Reverb
 
+//Value Computed by CMake
+JUCE_BINARY_DIR:STATIC=/Users/wujing/Documents/GitHub/MTEC-353/FinalProject/build/JUCE
+
+//Add build targets for the DemoRunner and PIPs
+JUCE_BUILD_EXAMPLES:BOOL=OFF
+
+//Add build targets for the Projucer and other tools
+JUCE_BUILD_EXTRAS:BOOL=OFF
+
+//Whether or not plugins should be installed to the system after
+// building
+JUCE_COPY_PLUGIN_AFTER_BUILD:BOOL=OFF
+
 //No help, variable specified on the command line.
-JUCE_DIR:UNINITIALIZED=
+JUCE_DIR:UNINITIALIZED=/Users/wujing/Documents/GitHub/JUCE
+
+//Show all module sources in IDE projects
+JUCE_ENABLE_MODULE_SOURCE_GROUPS:BOOL=OFF
+
+//The location, relative to the install prefix, where the JUCE
+// config file will be installed
+JUCE_INSTALL_DESTINATION:STRING=lib/cmake/JUCE-8.0.11
+
+//Value Computed by CMake
+JUCE_IS_TOP_LEVEL:STATIC=OFF
+
+//Only configure the JUCE modules
+JUCE_MODULES_ONLY:BOOL=OFF
+
+//Value Computed by CMake
+JUCE_SOURCE_DIR:STATIC=/Users/wujing/Documents/GitHub/JUCE
+
+//The location, relative to the install prefix, where juceaide
+// will be installed
+JUCE_TOOL_INSTALL_DIR:STRING=bin/JUCE-8.0.11
+
+//Location that overrides the default directory where our FindWebView2
+// script is looking for the *Microsoft.Web.WebView2* directory
+JUCE_WEBVIEW2_PACKAGE_LOCATION:BOOL=OFF
+
+//Path to a library.
+juce_found_AVFoundation:FILEPATH=/Library/Developer/CommandLineTools/SDKs/MacOSX14.5.sdk/System/Library/Frameworks/AVFoundation.framework
+
+//Path to a library.
+juce_found_AVKit:FILEPATH=/Library/Developer/CommandLineTools/SDKs/MacOSX14.5.sdk/System/Library/Frameworks/AVKit.framework
+
+//Path to a library.
+juce_found_Accelerate:FILEPATH=/Library/Developer/CommandLineTools/SDKs/MacOSX14.5.sdk/System/Library/Frameworks/Accelerate.framework
+
+//Path to a library.
+juce_found_AudioToolbox:FILEPATH=/Library/Developer/CommandLineTools/SDKs/MacOSX14.5.sdk/System/Library/Frameworks/AudioToolbox.framework
+
+//Path to a library.
+juce_found_AudioUnit:FILEPATH=/Library/Developer/CommandLineTools/SDKs/MacOSX14.5.sdk/System/Library/Frameworks/AudioUnit.framework
+
+//Path to a library.
+juce_found_Cocoa:FILEPATH=/Library/Developer/CommandLineTools/SDKs/MacOSX14.5.sdk/System/Library/Frameworks/Cocoa.framework
+
+//Path to a library.
+juce_found_CoreAudio:FILEPATH=/Library/Developer/CommandLineTools/SDKs/MacOSX14.5.sdk/System/Library/Frameworks/CoreAudio.framework
+
+//Path to a library.
+juce_found_CoreAudioKit:FILEPATH=/Library/Developer/CommandLineTools/SDKs/MacOSX14.5.sdk/System/Library/Frameworks/CoreAudioKit.framework
+
+//Path to a library.
+juce_found_CoreMIDI:FILEPATH=/Library/Developer/CommandLineTools/SDKs/MacOSX14.5.sdk/System/Library/Frameworks/CoreMIDI.framework
+
+//Path to a library.
+juce_found_CoreMedia:FILEPATH=/Library/Developer/CommandLineTools/SDKs/MacOSX14.5.sdk/System/Library/Frameworks/CoreMedia.framework
+
+//Path to a library.
+juce_found_DiscRecording:FILEPATH=/Library/Developer/CommandLineTools/SDKs/MacOSX14.5.sdk/System/Library/Frameworks/DiscRecording.framework
+
+//Path to a library.
+juce_found_Foundation:FILEPATH=/Library/Developer/CommandLineTools/SDKs/MacOSX14.5.sdk/System/Library/Frameworks/Foundation.framework
+
+//Path to a library.
+juce_found_IOKit:FILEPATH=/Library/Developer/CommandLineTools/SDKs/MacOSX14.5.sdk/System/Library/Frameworks/IOKit.framework
+
+//Path to a library.
+juce_found_OpenGL:FILEPATH=/Library/Developer/CommandLineTools/SDKs/MacOSX14.5.sdk/System/Library/Frameworks/OpenGL.framework
+
+//Path to a library.
+juce_found_QuartzCore:FILEPATH=/Library/Developer/CommandLineTools/SDKs/MacOSX14.5.sdk/System/Library/Frameworks/QuartzCore.framework
+
+//Path to a library.
+juce_found_Security:FILEPATH=/Library/Developer/CommandLineTools/SDKs/MacOSX14.5.sdk/System/Library/Frameworks/Security.framework
+
+//Path to a library.
+juce_found_WebKit:FILEPATH=/Library/Developer/CommandLineTools/SDKs/MacOSX14.5.sdk/System/Library/Frameworks/WebKit.framework
 
 
 ########################
@@ -344,7 +432,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=1
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=5
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP
@@ -389,4 +477,10 @@ CMAKE_TAPI-ADVANCED:INTERNAL=1
 CMAKE_UNAME:INTERNAL=/usr/bin/uname
 //ADVANCED property for variable: CMAKE_VERBOSE_MAKEFILE
 CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
+//The path to the folder holding this file and other resources
+JUCE_CMAKE_UTILS_DIR:INTERNAL=/Users/wujing/Documents/GitHub/JUCE/extras/Build/CMake
+//The name of the juceaide program
+JUCE_JUCEAIDE_NAME:INTERNAL=juceaide
+//The path to JUCE modules
+JUCE_MODULES_DIR:INTERNAL=/Users/wujing/Documents/GitHub/JUCE/modules
 

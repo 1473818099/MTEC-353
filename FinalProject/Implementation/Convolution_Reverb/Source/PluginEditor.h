@@ -19,6 +19,7 @@ private:
     Convolution_ReverbAudioProcessor& processor;
 
     juce::TextButton loadButton{ "Load IR" };
+    std::unique_ptr<juce::FileChooser> fileChooser;
     juce::Label statusLabel;
 
     juce::Slider dryWetSlider;

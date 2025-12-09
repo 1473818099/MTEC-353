@@ -9,6 +9,12 @@ This folder contains a ready-to-build JUCE convolution reverb plugin with a cust
    cmake -B build -S Implementation/Convolution_Reverb -DJUCE_DIR=/path/to/JUCE
    cmake --build build
    ```
+   
+
+   ```
+   cmake -B build -S Implementation/Convolution_Reverb -DJUCE_DIR=/Users/wujing/Documents/GitHub/JUCE/extras/Build/CMake
+   cmake --build build
+   ```
 3) The plugin targets AU and VST3 by default (`COPY_PLUGIN_AFTER_BUILD` is enabled).
 
 ## Features

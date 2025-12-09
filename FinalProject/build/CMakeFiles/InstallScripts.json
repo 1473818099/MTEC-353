@@ -1,0 +1,11 @@
+{
+	"InstallScripts" : 
+	[
+		"/Users/wujing/Documents/GitHub/MTEC-353/FinalProject/build/cmake_install.cmake",
+		"/Users/wujing/Documents/GitHub/MTEC-353/FinalProject/build/JUCE/cmake_install.cmake",
+		"/Users/wujing/Documents/GitHub/MTEC-353/FinalProject/build/JUCE/modules/cmake_install.cmake",
+		"/Users/wujing/Documents/GitHub/MTEC-353/FinalProject/build/JUCE/extras/Build/cmake_install.cmake",
+		"/Users/wujing/Documents/GitHub/MTEC-353/FinalProject/build/JUCE/extras/Build/juceaide/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

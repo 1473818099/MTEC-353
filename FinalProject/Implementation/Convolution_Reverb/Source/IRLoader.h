@@ -16,6 +16,7 @@ public:
 private:
     juce::AudioFormatManager formatManager;
 
-    int computeFFTOrder(int blockSize, int irLength) const;
+    int computePartitionSize(int blockSize) const;
+    int computeFFTOrder(int fftSize) const;
     std::vector<float> makeMono(const juce::AudioBuffer<float>& buffer);
 };

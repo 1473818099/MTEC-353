@@ -21,13 +21,17 @@ const juce::String Convolution_ReverbAudioProcessor::getName() const
 
 bool Convolution_ReverbAudioProcessor::isBusesLayoutSupported(const BusesLayout& layouts) const
 {
-    if (layouts.getMainOutputChannelSet() == juce::AudioChannelSet::disabled())
+    const auto mainOut = layouts.getMainOutputChannelSet();
+    const auto mainIn  = layouts.getMainInputChannelSet();
+
+    if (mainOut.isDisabled() || mainIn.isDisabled())
         return false;
 
-    if (layouts.getMainOutputChannelSet() != layouts.getMainInputChannelSet())
+    if (mainOut != mainIn)
         return false;
 
-    return layouts.getMainOutputChannelSet().isStereo() || layouts.getMainOutputChannelSet().isMono();
+    return mainOut == juce::AudioChannelSet::mono()
+        || mainOut == juce::AudioChannelSet::stereo();
 }
 
 //==============================================================================
@@ -117,13 +121,10 @@ void Convolution_ReverbAudioProcessor::promptForImpulse()
 {
     juce::FileChooser chooser("Select Impulse Response", juce::File{}, "*.wav;*.aiff");
     chooser.launchAsync(juce::FileBrowserComponent::openMode | juce::FileBrowserComponent::canSelectFiles,
-                        [safeThis = juce::SafePointer<Convolution_ReverbAudioProcessor>(this)](const juce::FileChooser& fc) mutable {
-                            if (safeThis != nullptr)
-                            {
-                                auto result = fc.getResult();
-                                if (result.existsAsFile())
-                                    safeThis->loadImpulse(result);
-                            }
+                        [this](const juce::FileChooser& fc) {
+                            auto result = fc.getResult();
+                            if (result.existsAsFile())
+                                loadImpulse(result);
                         });
 }
 

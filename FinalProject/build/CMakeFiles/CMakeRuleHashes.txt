@@ -1,0 +1,4 @@
+# Hashes of file build rules.
+f26ec242a357dba2f9f66b832292b402 Convolution_Reverb_artefacts/JuceLibraryCode/Convolution_Reverb_AU/PkgInfo
+4ae19c0707ba1a1ad591dc1110f22a60 Convolution_Reverb_artefacts/JuceLibraryCode/Convolution_Reverb_VST3/PkgInfo
+be1a5c853030f880f2657dfd5c5599fd Convolution_Reverb_artefacts/JuceLibraryCode/JuceHeader.h
