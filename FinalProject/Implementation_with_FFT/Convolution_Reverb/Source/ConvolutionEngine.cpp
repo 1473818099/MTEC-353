@@ -1,5 +1,4 @@
 #include "ConvolutionEngine.h"
-#include <cmath>
 
 ConvolutionEngine::ConvolutionEngine() = default;
 
@@ -58,15 +57,14 @@ void ConvolutionEngine::process(juce::AudioBuffer<float>& buffer)
 
 void ConvolutionEngine::ensureFFTOrder(int desiredOrder)
 {
-    if (desiredOrder == fftOrder && !tempFreq.empty())
+    if (desiredOrder == fftOrder && fft)
         return;
 
     fftOrder = desiredOrder;
     fftSize = 1 << fftOrder;
+    fft = std::make_unique<juce::dsp::FFT>(fftOrder);
     tempFreq.assign(static_cast<size_t>(fftSize * 2), 0.0f);
     accumFreq.assign(static_cast<size_t>(fftSize * 2), 0.0f);
-    ifftTime.assign(static_cast<size_t>(fftSize), 0.0f);
-    complexBuffer.assign(static_cast<size_t>(fftSize), std::complex<float>(0.0f, 0.0f));
 
     for (auto& ch : overlapBuffers)
         ch.resize(static_cast<size_t>(fftSize), 0.0f);
@@ -118,8 +116,10 @@ void ConvolutionEngine::processChunk(int channel, float* samples, int chunkOffse
     const int channelIndex = std::min(channel, ir->numChannels - 1);
     const int bins = fftSize / 2 + 1;
 
-    // Prepare input FFT buffer using internal FFT
-    performFFT(samples + chunkOffset, chunkSize, tempFreq);
+    // Prepare input FFT buffer using JUCE FFT
+    std::fill(tempFreq.begin(), tempFreq.end(), 0.0f);
+    std::copy(samples + chunkOffset, samples + chunkOffset + chunkSize, tempFreq.begin());
+    fft->performRealOnlyForwardTransform(tempFreq.data());
 
     auto& channelSpectra = inputSpectra[static_cast<size_t>(channel)];
     auto& writePos = writePositions[static_cast<size_t>(channel)];
@@ -148,7 +148,7 @@ void ConvolutionEngine::processChunk(int channel, float* samples, int chunkOffse
     }
 
     // IFFT
-    performIFFT(accumFreq, ifftTime);
+    fft->performRealOnlyInverseTransform(accumFreq.data());
     const float scale = 1.0f / static_cast<float>(fftSize);
 
     auto& overlap = overlapBuffers[static_cast<size_t>(channel)];
@@ -156,7 +156,7 @@ void ConvolutionEngine::processChunk(int channel, float* samples, int chunkOffse
 
     for (int n = 0; n < chunkSize; ++n)
     {
-        const float wet = (ifftTime[n] * scale) + overlap[n];
+        const float wet = (accumFreq[n] * scale) + overlap[n];
         samples[chunkOffset + n] = outputGain * (wetMix * wet + dryMix * dryCopy[chunkOffset + n]);
     }
 
@@ -170,108 +170,8 @@ void ConvolutionEngine::processChunk(int channel, float* samples, int chunkOffse
         // Add new tail into overlap
         const int tail = remain;
         for (int i = 0; i < tail; ++i)
-            overlap[i] += ifftTime[chunkSize + i] * scale;
+            overlap[i] += accumFreq[chunkSize + i] * scale;
     }
 
     writePos = (writePos + 1) % std::max(1, ir->numPartitions);
-}
-
-void ConvolutionEngine::performFFT(const float* timeDomain, int numSamples, std::vector<float>& freqOut)
-{
-    const int copyCount = std::min(numSamples, fftSize);
-
-    if (complexBuffer.size() != static_cast<size_t>(fftSize))
-        complexBuffer.assign(static_cast<size_t>(fftSize), std::complex<float>(0.0f, 0.0f));
-
-    for (int i = 0; i < copyCount; ++i)
-        complexBuffer[static_cast<size_t>(i)] = std::complex<float>(timeDomain[i], 0.0f);
-
-    for (int i = copyCount; i < fftSize; ++i)
-        complexBuffer[static_cast<size_t>(i)] = std::complex<float>(0.0f, 0.0f);
-
-    fftIterative(complexBuffer, false);
-
-    if (freqOut.size() != static_cast<size_t>(fftSize * 2))
-        freqOut.resize(static_cast<size_t>(fftSize * 2));
-    std::fill(freqOut.begin(), freqOut.end(), 0.0f);
-
-    const int bins = fftSize / 2 + 1;
-    for (int k = 0; k < bins; ++k)
-    {
-        const int bi = k * 2;
-        const auto& c = complexBuffer[static_cast<size_t>(k)];
-        freqOut[bi] = c.real();
-        freqOut[bi + 1] = c.imag();
-    }
-}
-
-void ConvolutionEngine::performIFFT(const std::vector<float>& freqIn, std::vector<float>& timeOut)
-{
-    if (complexBuffer.size() != static_cast<size_t>(fftSize))
-        complexBuffer.assign(static_cast<size_t>(fftSize), std::complex<float>(0.0f, 0.0f));
-
-    const int bins = fftSize / 2 + 1;
-    for (int k = 0; k < bins; ++k)
-    {
-        const int bi = k * 2;
-        complexBuffer[static_cast<size_t>(k)] = std::complex<float>(freqIn[bi], freqIn[bi + 1]);
-    }
-
-    for (int k = 1; k < fftSize / 2; ++k)
-        complexBuffer[static_cast<size_t>(fftSize - k)] = std::conj(complexBuffer[static_cast<size_t>(k)]);
-
-    if (fftSize > 1)
-    {
-        const int nyquist = fftSize / 2;
-        complexBuffer[static_cast<size_t>(nyquist)] = std::complex<float>(
-            freqIn[static_cast<size_t>(nyquist * 2)],
-            freqIn[static_cast<size_t>(nyquist * 2 + 1)]);
-    }
-
-    fftIterative(complexBuffer, true);
-
-    if (timeOut.size() != static_cast<size_t>(fftSize))
-        timeOut.resize(static_cast<size_t>(fftSize));
-
-    for (int n = 0; n < fftSize; ++n)
-        timeOut[static_cast<size_t>(n)] = complexBuffer[static_cast<size_t>(n)].real();
-}
-
-void ConvolutionEngine::fftIterative(std::vector<std::complex<float>>& buffer, bool inverse)
-{
-    const size_t n = buffer.size();
-    if (n <= 1)
-        return;
-
-    for (size_t i = 1, j = 0; i < n; ++i)
-    {
-        size_t bit = n >> 1;
-        for (; j & bit; bit >>= 1)
-            j ^= bit;
-        j ^= bit;
-        if (i < j)
-            std::swap(buffer[i], buffer[j]);
-    }
-
-    const float dir = inverse ? 1.0f : -1.0f;
-
-    for (size_t len = 2; len <= n; len <<= 1)
-    {
-        const float angle = dir * juce::MathConstants<float>::twoPi / static_cast<float>(len);
-        const std::complex<float> wLen(std::cos(angle), std::sin(angle));
-
-        for (size_t i = 0; i < n; i += len)
-        {
-            std::complex<float> w(1.0f, 0.0f);
-            const size_t half = len >> 1;
-            for (size_t j = 0; j < half; ++j)
-            {
-                const auto u = buffer[i + j];
-                const auto v = buffer[i + j + half] * w;
-                buffer[i + j] = u + v;
-                buffer[i + j + half] = u - v;
-                w *= wLen;
-            }
-        }
-    }
 }

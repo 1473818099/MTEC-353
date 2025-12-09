@@ -2,7 +2,6 @@
 
 #include <atomic>
 #include <algorithm>
-#include <complex>
 #include <memory>
 #include <vector>
 #include <juce_dsp/juce_dsp.h>
@@ -39,10 +38,8 @@ private:
     void resizeBuffers(int numChannels, int numPartitions);
     void processBlockPartitioned(int channel, float* samples, int numSamples);
     void processChunk(int channel, float* samples, int chunkOffset, int chunkSize);
-    void performFFT(const float* timeDomain, int numSamples, std::vector<float>& freqOut);
-    void performIFFT(const std::vector<float>& freqIn, std::vector<float>& timeOut);
-    void fftIterative(std::vector<std::complex<float>>& buffer, bool inverse);
 
+    std::unique_ptr<juce::dsp::FFT> fft;
     int fftOrder = 11;
     int fftSize = 2048;
     int partitionSize = 1024;
@@ -62,6 +59,4 @@ private:
     std::vector<float> tempFreq;      // interleaved buffer length 2 * fftSize
     std::vector<float> accumFreq;     // accumulation buffer length 2 * fftSize
     std::vector<float> dryCopy;       // scratch for dry signal per host block
-    std::vector<float> ifftTime;      // time-domain buffer after IFFT
-    std::vector<std::complex<float>> complexBuffer; // reused for FFT/IFFT stages
 };
