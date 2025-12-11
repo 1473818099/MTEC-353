@@ -1,0 +1,11 @@
+{
+	"InstallScripts" : 
+	[
+		"/Users/wujing/Documents/GitHub/MTEC-353/FinalProject/Implementation_with_FFT/build/cmake_install.cmake",
+		"/Users/wujing/Documents/GitHub/MTEC-353/FinalProject/Implementation_with_FFT/build/JUCE/cmake_install.cmake",
+		"/Users/wujing/Documents/GitHub/MTEC-353/FinalProject/Implementation_with_FFT/build/JUCE/modules/cmake_install.cmake",
+		"/Users/wujing/Documents/GitHub/MTEC-353/FinalProject/Implementation_with_FFT/build/JUCE/extras/Build/cmake_install.cmake",
+		"/Users/wujing/Documents/GitHub/MTEC-353/FinalProject/Implementation_with_FFT/build/JUCE/extras/Build/juceaide/cmake_install.cmake"
+	],
+	"Parallel" : false
+}
