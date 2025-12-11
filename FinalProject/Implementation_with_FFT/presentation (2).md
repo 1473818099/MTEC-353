@@ -149,7 +149,9 @@ for (int p = 0; p < ir->numPartitions; ++p)
 }
 ```
 
-![1](1.png)
+<p align="center">
+  <img src="1.png" alt="My plot" width="500">
+</p>
 
 ### 3.1 Ring-Buffer Alignment
 
